@@ -63,8 +63,16 @@ const Chat = () => {
             setIsStreaming(false);
             lastChunkRef.current = ''; // Reset the chunk reference
           } else if (data.message_type === 'error') {
-            console.error('Error received:', data.message);
+            console.error(data.message || "An unknown error occurred");
           }
+          else if (data.message_type === "video_metadata") {
+          const event = new CustomEvent('videoMetadataReceived', { detail: data.metadata });
+          window.dispatchEvent(event);
+        }
+         else if (data.message_type === "notification") {
+        // Display the notification to the user
+        displayNotification(data.message);}
+
         };
     
         websocket.current.onerror = (error) => {
@@ -81,9 +89,21 @@ const Chat = () => {
         };
       }, []);
 
+  function displayNotification(message) {
+    const chatBox = document.getElementById("chat-box");
+    const notification = document.createElement("div");
+    notification.className = "notification";
+    notification.textContent = message;
+    chatBox.appendChild(notification);
+}
+
   // Function to handle message sending
   const handleSendMessage =  () => {
     if (input.trim() === '') return;
+
+    // Dispatch the newQueryReceived event (this resets the video cards with every new query)
+    const event = new Event('newQueryReceived');
+    window.dispatchEvent(event);
 
     // Add user message to the messages array
     const userMessage = { sender: 'user', text: input };
