@@ -1,6 +1,6 @@
 //src/MainPage.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Card, CardContent, Typography, CardMedia, CircularProgress, IconButton  } from '@mui/material';
+import { Box, Card, CardContent, Typography, CardMedia, CircularProgress, Button, IconButton  } from '@mui/material';
 import { Chat as ChatIcon, Close as CloseIcon } from '@mui/icons-material';
 import Chat from './chat';
 
@@ -119,6 +119,12 @@ const MainPage = () => {
   }, [messages]);
 
 
+  // Function to handle the reset button click
+  const resetVideos = () => {
+    setVideoData([]); // Clear the existing video data
+    processedLinks.current.clear(); // Clear processed links
+    setLoading(true); // Optionally, reset loading state
+  };
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', flexDirection: 'column' }}>
@@ -205,7 +211,26 @@ const MainPage = () => {
         )}
 
       </Box>
-
+      
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={resetVideos}
+        sx={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '20px',
+          borderRadius: '50%', // Make the button round
+          width: '40px', // Width of the button
+          height: '40px', // Height of the button
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          boxShadow: 3,
+        }}
+      >
+        Reset
+      </Button>
       {/* Minimized Chat Bubble */}
       {!chatOpen && (
         <IconButton

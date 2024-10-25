@@ -68,7 +68,12 @@ const Chat = () => {
           else if (data.message_type === "video_metadata") {
           const event = new CustomEvent('videoMetadataReceived', { detail: data.metadata });
           window.dispatchEvent(event);
-        }
+          }
+          else if (data.message_type === "reset_videos") {
+            // Dispatch the newQueryReceived event (this resets the video cards with every new query)
+            const event = new Event('newQueryReceived');
+            window.dispatchEvent(event);
+          }
          else if (data.message_type === "notification") {
         // Display the notification to the user
         displayNotification(data.message);}
@@ -101,9 +106,9 @@ const Chat = () => {
   const handleSendMessage =  () => {
     if (input.trim() === '') return;
 
-    // Dispatch the newQueryReceived event (this resets the video cards with every new query)
-    const event = new Event('newQueryReceived');
-    window.dispatchEvent(event);
+    // // Dispatch the newQueryReceived event (this resets the video cards with every new query)
+    // const event = new Event('newQueryReceived');
+    // window.dispatchEvent(event);
 
     // Add user message to the messages array
     const userMessage = { sender: 'user', text: input };
