@@ -1,7 +1,8 @@
 //src/MainPage.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Card, CardContent, Typography, CardMedia, CircularProgress, Button, IconButton  } from '@mui/material';
+import { Box, Card, CardContent, Typography, CardMedia, CircularProgress, Button, IconButton, Drawer, List, ListItem, ListItemText  } from '@mui/material';
 import { Chat as ChatIcon, Close as CloseIcon } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 import Chat from './chat';
 
 const MainPage = () => {
@@ -14,6 +15,7 @@ const MainPage = () => {
  const processedLinks = useRef(new Set()); // Use a ref to store processed links
  const resizeTimeout = useRef(null); // Ref for the resize timeout
  const [messages, setMessages] = useState([]); // Store chat messages in state
+ const [drawerOpen, setDrawerOpen] = useState(false); // State for sidebar (Drawer)
 
   useEffect(() => {
     console.log("MainPage component mounted"); // Log when the component mounts
@@ -240,6 +242,34 @@ const MainPage = () => {
           <ChatIcon />
         </IconButton>
       )}
+         {/* Sidebar (Drawer) */}
+      <Drawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        sx={{ width: 250, flexShrink: 0 }}
+      >
+        <List>
+          <ListItem button onClick={() => setDrawerOpen(false)}>
+            <ListItemText primary="Home" />
+          </ListItem>
+          <ListItem button onClick={() => setDrawerOpen(false)}>
+          <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <ListItemText primary="Profile" />
+             </Link>
+          </ListItem>
+          <ListItem button onClick={() => setDrawerOpen(false)}>
+          <Link to="/memory" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <ListItemText primary="Past Chats" />
+            </Link>
+          </ListItem>
+        </List>
+      </Drawer>
+
+      {/* Button to open Sidebar */}
+      <IconButton onClick={() => setDrawerOpen(true)} sx={{ position: 'absolute', top: '20px', left: '20px' }}>
+        <ChatIcon />
+      </IconButton>
     </Box>
   );
 };
