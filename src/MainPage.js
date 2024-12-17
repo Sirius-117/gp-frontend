@@ -4,6 +4,7 @@ import { Box, Card, CardContent, Typography, CardMedia, CircularProgress, Button
 import { Chat as ChatIcon, Close as CloseIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import Chat from './chat';
+import { auth } from './firebase';
 
 const MainPage = () => {
  const [videoData, setVideoData] = useState([]);
@@ -16,8 +17,20 @@ const MainPage = () => {
  const resizeTimeout = useRef(null); // Ref for the resize timeout
  const [messages, setMessages] = useState([]); // Store chat messages in state
  const [drawerOpen, setDrawerOpen] = useState(false); // State for sidebar (Drawer)
+ const [userId, setUserId] = useState(null);  // State for user ID
+
+ useEffect(() => {
+  const user = auth.currentUser;  // Get the current user from Firebase auth
+  if (user) {
+    setUserId(user.uid);  // Store the user ID
+  } else {
+    console.log('No user logged in');
+  }
+  }, []);
+
 
   useEffect(() => {
+    if (!userId) return; // Don't open WebSocket connection if userId isn't available
     console.log("MainPage component mounted"); // Log when the component mounts
 
     // WebSocket connection setup
@@ -26,6 +39,8 @@ const MainPage = () => {
 
     videoSocket.current.onopen = () => {
       console.log("WebSocket connection opened");
+      // Send the userId to the backend to request past chats
+      videoSocket.current.send(JSON.stringify({ type: 'get_past_chats', userId }))
     };
 
     videoSocket.current.onmessage = (event) => {
@@ -79,7 +94,7 @@ const MainPage = () => {
         videoSocket.current.close(); // Cleanup WebSocket on component unmount
         window.removeEventListener('newQueryReceived', handleNewQuery);
     };
-  }, []);
+  }, [userId]);
 
   // Handle resizing the chatbot panel by dragging
   const handleMouseDown = () => setIsResizing(true);

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import MainPage from './MainPage';
-import ProfilePage from './profilepage';  // Import ProfilePage
-import PastChatsPage from './pastchatspage';  // Import PastChatsPage
+import ProfilePage from './profilepage'; // Import ProfilePage
+import PastChatsPage from './pastchatspage'; // Import PastChatsPage
 import SignIn from './sign_in';
 import Register from './register';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -25,16 +25,16 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const [user, setUser] = useState(null);  // user state to track logged-in user
-  const [isRegistering, setIsRegistering] = useState(false);  // Track if we're on the Register page
+  const [user, setUser] = useState(null); // user state to track logged-in user
+  const [isRegistering, setIsRegistering] = useState(false); // Track if we're on the Register page
 
   useEffect(() => {
     // Track the user authentication status using Firebase
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        setUser(currentUser);  // Set user if authenticated
+        setUser(currentUser); // Set user if authenticated
       } else {
-        setUser(null);  // Clear user if not authenticated
+        setUser(null); // Clear user if not authenticated
       }
     });
 
@@ -45,13 +45,13 @@ function App() {
   // Handle successful sign-in
   const handleSignInSuccess = () => {
     console.log('Sign-in successful');
-    setUser(auth.currentUser);  // Set user after successful sign-in
+    setUser(auth.currentUser); // Set user after successful sign-in
   };
 
   // Handle successful registration
   const handleRegisterSuccess = () => {
     console.log('Registration successful');
-    setUser(auth.currentUser);  // Set user after successful registration
+    setUser(auth.currentUser); // Set user after successful registration
   };
 
   // If the user is authenticated, render the main page and routes
@@ -59,12 +59,17 @@ function App() {
     return (
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <Router>  {/* Wrap the app with Router */}
+        <Router>
+          {/* Wrap the app with Router */}
           <div className="App">
-            <Routes>  {/* Define your routes here */}
+            <Routes>
+              {/* Define your routes here */}
               <Route path="/" element={<MainPage />} />
               <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/past-chats" element={<PastChatsPage />} />
+              <Route
+                path="/past-chats"
+                element={<PastChatsPage user={user} />}
+              />
             </Routes>
           </div>
         </Router>
@@ -89,9 +94,9 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <div className="App">
-        <SignIn 
-          onSignInSuccess={handleSignInSuccess} 
-          setIsRegistering={setIsRegistering} 
+        <SignIn
+          onSignInSuccess={handleSignInSuccess}
+          setIsRegistering={setIsRegistering}
         />
       </div>
     </ThemeProvider>
