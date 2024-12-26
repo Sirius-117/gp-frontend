@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, TextField, Button, Typography, Card, CardContent, CircularProgress } from '@mui/material';
-
+import { useWebSocket } from './WebSocketContext';
 
 const Chat = () => {
   const [messages, setMessages] = useState([{ sender: 'bot', text: 'Welcome to the chat! How can I assist you today?' }]);
@@ -77,6 +77,11 @@ const Chat = () => {
          else if (data.message_type === "notification") {
         // Display the notification to the user
         displayNotification(data.message);}
+
+        // else if (data.type === "past_chats") {
+        //   console.log('Dispatching pastChats event with data:', data.data); // Check if the data is correct
+        //   const pastChatsEvent = new CustomEvent('pastChats', { detail: data.data });
+        //   window.dispatchEvent(pastChatsEvent);} // Broadcast the event
 
         };
     

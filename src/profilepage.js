@@ -4,6 +4,7 @@ import { updateProfile } from 'firebase/auth';  // Import updateProfile from Fir
 import { Drawer, List, ListItem, ListItemText, IconButton, TextField, Button } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import { Link } from 'react-router-dom';
+import Layout from './layout';
 
 const ProfilePage = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -49,9 +50,10 @@ const ProfilePage = () => {
   };
 
   return (
+    <Layout>
     <div>
       {/* Sidebar (Drawer) */}
-      <Drawer
+      {/* <Drawer
         anchor="left"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
@@ -69,17 +71,17 @@ const ProfilePage = () => {
             </Link>
           </ListItem>
           <ListItem button onClick={() => setDrawerOpen(false)}>
-            <Link to="/memory" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/past-chats" style={{ textDecoration: 'none', color: 'inherit' }}>
               <ListItemText primary="Past Chats" />
             </Link>
           </ListItem>
         </List>
-      </Drawer>
+      </Drawer> */}
 
       {/* Button to open Sidebar */}
-      <IconButton onClick={() => setDrawerOpen(true)} sx={{ position: 'absolute', top: '20px', left: '20px' }}>
+      {/* <IconButton onClick={() => setDrawerOpen(true)} sx={{ position: 'absolute', top: '20px', left: '20px' }}>
         <ChatIcon />
-      </IconButton>
+      </IconButton> */}
 
       {/* Main Content */}
       <div style={{ marginLeft: 250, marginTop: '64px', padding: '20px' }}>
@@ -110,6 +112,7 @@ const ProfilePage = () => {
         )}
       </div>
     </div>
+    </Layout>
   );
 };
 

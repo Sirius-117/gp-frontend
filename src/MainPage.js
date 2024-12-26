@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Card, CardContent, Typography, CardMedia, CircularProgress, Button, IconButton, Drawer, List, ListItem, ListItemText  } from '@mui/material';
 import { Chat as ChatIcon, Close as CloseIcon } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
 import Chat from './chat';
 import { auth } from './firebase';
-
+import Layout from './layout'; // Import Layout component
+import { useWebSocket } from './WebSocketContext'; // Import the useWebSocket hook
 const MainPage = () => {
  const [videoData, setVideoData] = useState([]);
  const [loading, setLoading] = useState(true);
@@ -16,9 +16,7 @@ const MainPage = () => {
  const processedLinks = useRef(new Set()); // Use a ref to store processed links
  const resizeTimeout = useRef(null); // Ref for the resize timeout
  const [messages, setMessages] = useState([]); // Store chat messages in state
- const [drawerOpen, setDrawerOpen] = useState(false); // State for sidebar (Drawer)
  const [userId, setUserId] = useState(null);  // State for user ID
-
  useEffect(() => {
   const user = auth.currentUser;  // Get the current user from Firebase auth
   if (user) {
@@ -143,7 +141,21 @@ const MainPage = () => {
     setLoading(true); // Optionally, reset loading state
   };
 
+  // useEffect(() => {
+  //   const handlePastChats = (event) => {
+  //     setPastChats(event.detail); // Assuming `setPastChats` updates the state
+  //   };
+  
+  //   window.addEventListener('pastChats', handlePastChats);
+  
+  //   return () => {
+  //     window.removeEventListener('pastChats', handlePastChats);
+  //   };
+  // }, []);
+  
+
   return (
+    <Layout> 
     <Box sx={{ display: 'flex', height: '100vh', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', padding: '20px', flexGrow: 1, height: '100%' }}>
         
@@ -257,7 +269,7 @@ const MainPage = () => {
           <ChatIcon />
         </IconButton>
       )}
-         {/* Sidebar (Drawer) */}
+         {/* Sidebar (Drawer)
       <Drawer
         anchor="left"
         open={drawerOpen}
@@ -274,18 +286,21 @@ const MainPage = () => {
              </Link>
           </ListItem>
           <ListItem button onClick={() => setDrawerOpen(false)}>
-          <Link to="/memory" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link  to={{pathname: "/past-chats", state: { pastChats },}} style={{ textDecoration: 'none', color: 'inherit' }}>
             <ListItemText primary="Past Chats" />
             </Link>
           </ListItem>
         </List>
-      </Drawer>
+      </Drawer> */}
 
       {/* Button to open Sidebar */}
-      <IconButton onClick={() => setDrawerOpen(true)} sx={{ position: 'absolute', top: '20px', left: '20px' }}>
+      {/* <IconButton onClick={() => setDrawerOpen(true)} sx={{ position: 'absolute', top: '20px', left: '20px' }}>
         <ChatIcon />
-      </IconButton>
+      </IconButton> */}
+      {/* Pass the pastChats data to the PastChats component */}
+      {/* <PastChats chats={pastChats} /> */}
     </Box>
+    </Layout>
   );
 };
 

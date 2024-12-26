@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import MainPage from './MainPage';
-import ProfilePage from './profilepage'; // Import ProfilePage
-import PastChatsPage from './pastchatspage'; // Import PastChatsPage
+import ProfilePage from './profilepage'; 
+import PastChatsPage from './pastchatspage'; 
 import SignIn from './sign_in';
 import Register from './register';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -10,6 +10,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { auth, onAuthStateChanged } from './firebase';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './layout';
+import { WebSocketProvider } from './WebSocketContext'; // Import the WebSocketProvider
 
 // Create a dark theme
 const darkTheme = createTheme({
@@ -60,18 +61,21 @@ function App() {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <Router>
-          {/* Wrap the app with Router */}
-          <div className="App">
-            <Routes>
-              {/* Define your routes here */}
-              <Route path="/" element={<MainPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route
-                path="/past-chats"
-                element={<PastChatsPage user={user} />}
-              />
-            </Routes>
-          </div>
+          {/* Wrap the entire app with WebSocketProvider */}
+          <WebSocketProvider>
+            <Layout>
+              <div className="App">
+                <Routes>
+                  <Route path="/" element={<MainPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route
+                    path="/past-chats"
+                    element={<PastChatsPage user={user} />}
+                  />
+                </Routes>
+              </div>
+            </Layout>
+          </WebSocketProvider>
         </Router>
       </ThemeProvider>
     );
